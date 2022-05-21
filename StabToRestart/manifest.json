@@ -1,13 +1,13 @@
 ﻿{
-  "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
-  "id": "StabToRestart",
-  "name": "StabToRestart",
-  "author": "",
-  "version": "0.0.1",
-  "description": "",
-  "gameVersion": "1.22.0",
-  "dependsOn": {
-      "BSIPA": "^4.2.0",
-      "SiraUtil": "^3.0.0"
-  }
+    "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
+    "id": "StabToRestart",
+    "name": "StabToRestart",
+    "author": "DeathByPrograms",
+    "version": "0.1.0",
+    "description": "A Beat Saber mod that lets you stab yourself to restart the song",
+    "gameVersion": "1.22.0",
+    "dependsOn": {
+        "BSIPA": "^4.2.0",
+        "SiraUtil": "^3.0.0"
+    }
 }

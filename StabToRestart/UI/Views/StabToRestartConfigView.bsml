@@ -1,0 +1,12 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<settings-container>
+		<bool-setting text='Enabled' value='enabled' apply-on-change='true'></bool-setting>
+		<vertical id='settings' child-control-height='false'>
+			<dropdown-list-setting text='Restart Condition on Stab' value='current-trigger' choices='trigger-list' formatter='condition-to-string' apply-on-change='true'></dropdown-list-setting>
+			<dropdown-list-setting text='Button' value='current-button' choices='button-list' formatter='button-to-string' id='button-mode-choice'></dropdown-list-setting>
+			<slider-setting text='Minimum Stab Time' value='min-stab-time' min='0.0' max='5' increment='0.25'></slider-setting>
+			<slider-setting text='Maximum Stab Horizontal Angle' value='max-horizontal' min='0.0' max='90.0' increment='5.0'></slider-setting>
+			<slider-setting text='Maximum Stab Vertical Angle' value='max-vertical' min='0.0' max='90.0' increment='5.0'></slider-setting>
+		</vertical>
+	</settings-container>
+</bg>

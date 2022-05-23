@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using StabToRestart.Configuration;
 using Zenject;
 
 namespace StabToRestart
@@ -7,8 +8,15 @@ namespace StabToRestart
     {
         public override void InstallBindings()
         {
-            Container.Bind<StabToRestartController>().FromNewComponentOnNewGameObject().WithGameObjectName("StabToRestartController").AsSingle().NonLazy();
-            Container.Bind<CapsuleCollider>().FromNewComponentOnNewGameObject().WithGameObjectName("Body stab collider").WhenInjectedInto<StabToRestartController>();
+            if (StabToRestartConfig.Instance.IsEnabled)
+            {
+                Container.Bind<StabToRestartController>()
+                    .FromNewComponentOnNewGameObject()
+                    .WithGameObjectName("StabToRestartController")
+                    .AsSingle()
+                    .NonLazy();
+            }
+            
         }
     }
 }

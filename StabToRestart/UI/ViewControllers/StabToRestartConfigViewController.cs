@@ -91,6 +91,22 @@ namespace StabToRestart.UI.ViewControllers
             { CommonUsages.primary2DAxisClick, "Thumbstick"}
         };
 
+        private readonly Dictionary<InputFeatureUsage<bool>, string> _oculusOpenVRMappings = new Dictionary<InputFeatureUsage<bool>, string>() {
+            { CommonUsages.primaryButton, "[Y/B]"},
+            { CommonUsages.secondaryButton, "[X/A]"},
+            { CommonUsages.gripButton, "Grip"},
+            { CommonUsages.triggerButton, "Trigger"},
+            { CommonUsages.primary2DAxisClick, "Joystick"}
+        };
+
+        private readonly Dictionary<InputFeatureUsage<bool>, string> _openVRMappings = new Dictionary<InputFeatureUsage<bool>, string>() {
+            { CommonUsages.primaryButton, "Primary"},
+            { CommonUsages.secondaryButton, "Alternate"},
+            { CommonUsages.gripButton, "Grip"},
+            { CommonUsages.triggerButton, "Trigger"},
+            { CommonUsages.primary2DAxisClick, "Trackpad/Joystick"}
+        };
+
         [UIAction("button-to-string")]
         private string ButtonToString(InputFeatureUsage<bool> button)
         {
@@ -104,14 +120,27 @@ namespace StabToRestart.UI.ViewControllers
                     return "Button not supported";
                 }
             }
-            if(leftController.Value.manufacturer == "Oculus" && leftController.Value.TryGetFeatureValue(CommonUsages.menuButton, out _))
+            if(leftController.Value.manufacturer.Contains("Oculus"))
             {
-                if (_oculusMappings.ContainsKey(button))
-                    return _oculusMappings[button];
+                if(leftController.Value.TryGetFeatureValue(CommonUsages.menuButton, out _))
+                {
+                    if (_oculusMappings.ContainsKey(button))
+                        return _oculusMappings[button];
+                    return "Error";
+                }
+                else
+                {
+                    if (_oculusOpenVRMappings.ContainsKey(button))
+                        return _oculusOpenVRMappings[button];
+                    return "Error";
+                }
+            }
+            else
+            {
+                if (_openVRMappings.ContainsKey(button))
+                    return _openVRMappings[button];
                 return "Error";
             }
-            return button.name;
-            
         }
 
         [UIValue("min-stab-time")]

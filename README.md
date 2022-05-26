@@ -33,7 +33,6 @@ If that file is created correctly, references to dependencies will be automatica
 
 ## Possible/Known Issues
 
-- I have only tested this on my own headset (a Quest 2), and have been told the system I used to access buttons presses may not work with SteamVR. Note that the button condition may not work for non-Oculus users.
 - When the button condition is not selected, the dropdown menu for the button choice will disappear, while the text will remain.
 
 ### Contribute

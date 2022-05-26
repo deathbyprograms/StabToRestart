@@ -3,7 +3,7 @@
     "id": "StabToRestart",
     "name": "StabToRestart",
     "author": "DeathByPrograms",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "A Beat Saber mod that lets you stab yourself to restart the song",
     "gameVersion": "1.22.0",
     "dependsOn": {

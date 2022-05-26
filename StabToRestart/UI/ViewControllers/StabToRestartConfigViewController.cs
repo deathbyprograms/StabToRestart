@@ -164,6 +164,13 @@ namespace StabToRestart.UI.ViewControllers
             set => StabToRestartConfig.Instance.MaxVertical = value;
         }
 
+        [UIValue("min-speed")]
+        private float _minSpeed
+        {
+            get => StabToRestartConfig.Instance.MinSpeed;
+            set => StabToRestartConfig.Instance.MinSpeed = value;
+        }
+
         [UIAction("#post-parse")]
         internal void PostParse()
         {

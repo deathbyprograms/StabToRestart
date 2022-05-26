@@ -12,7 +12,7 @@ namespace StabToRestart
     {
         private readonly float MAX_HORIZONTAL_ANGLE = StabToRestartConfig.Instance.MaxHorizontal;
         private readonly float MAX_VERTICAL_ANGLE = StabToRestartConfig.Instance.MaxVertical;
-        private readonly float MIN_SPEED = 2f;
+        private readonly float MIN_SPEED = StabToRestartConfig.Instance.MinSpeed;
 
         private float _playerHeight;
         private bool _automaticHeight;
@@ -120,9 +120,8 @@ namespace StabToRestart
             Vector3 saberVector = saber.saberBladeTopPos - saber.saberBladeBottomPos;
 
             Vector3 ignoreYVector = Vector3.one - Vector3.up;
-            Vector3 onlyYVector = Vector3.up;
             float horizontalAngle = Vector3.Angle(Vector3.Scale(saberVector, ignoreYVector), Vector3.Scale(BodyCollider.transform.position - saber.saberBladeBottomPos, ignoreYVector));
-            float verticalAngle = Vector3.Angle(Vector3.Scale(saberVector, onlyYVector), Vector3.zero);
+            float verticalAngle = Vector3.Angle(saberVector, Vector3.Scale(saberVector, ignoreYVector));
             float speed = saber.bladeSpeed;
             return horizontalAngle < MAX_HORIZONTAL_ANGLE && verticalAngle < MAX_VERTICAL_ANGLE && speed > MIN_SPEED;
         }

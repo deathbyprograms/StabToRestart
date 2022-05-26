@@ -26,6 +26,7 @@ namespace StabToRestart.Configuration
         public virtual InputFeatureUsage<bool> SelectedButton { get; set; } = CommonUsages.primaryButton;
 
         public virtual float MinStabTime { get; set; } = 0.5f;
+        public virtual float MinSpeed { get; set; } = 2f;
 
         public virtual void CopyFrom(StabToRestartConfig other)
         {

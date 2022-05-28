@@ -68,7 +68,7 @@ namespace StabToRestart.UI.ViewControllers
         private GameObject _buttonModeChoice = null;
 
         [UIValue("current-button")]
-        private InputFeatureUsage<bool> _currButton
+        private string _currButton
         {
             get => StabToRestartConfig.Instance.SelectedButton;
             set => StabToRestartConfig.Instance.SelectedButton = value;
@@ -76,71 +76,66 @@ namespace StabToRestart.UI.ViewControllers
 
         [UIValue("button-list")]
         private readonly List<object> _buttons = new object[] {
-            CommonUsages.primaryButton,
-            CommonUsages.secondaryButton,
-            CommonUsages.gripButton,
-            CommonUsages.triggerButton,
-            CommonUsages.primary2DAxisClick
+            "PrimaryButton",
+            "SecondaryButton",
+            "Grip",
+            "TriggerButton",
+            "Primary2DAxisClick"
         }.ToList<object>();
 
-        private readonly Dictionary<InputFeatureUsage<bool>, string> _oculusMappings = new Dictionary<InputFeatureUsage<bool>, string>() {
-            { CommonUsages.primaryButton, "[X/A]"},
-            { CommonUsages.secondaryButton, "[Y/B]"},
-            { CommonUsages.gripButton, "Grip"},
-            { CommonUsages.triggerButton, "Trigger"},
-            { CommonUsages.primary2DAxisClick, "Thumbstick"}
+        private readonly Dictionary<string, string> _oculusMappings = new Dictionary<string, string>() {
+            {"PrimaryButton", "[X/A]"},
+            {"SecondaryButton", "[Y/B]"},
+            {"Grip", "Grip"},
+            {"TriggerButton", "Trigger"},
+            {"Primary2DAxisClick", "Thumbstick"}
         };
 
-        private readonly Dictionary<InputFeatureUsage<bool>, string> _oculusOpenVRMappings = new Dictionary<InputFeatureUsage<bool>, string>() {
-            { CommonUsages.primaryButton, "[Y/B]"},
-            { CommonUsages.secondaryButton, "[X/A]"},
-            { CommonUsages.gripButton, "Grip"},
-            { CommonUsages.triggerButton, "Trigger"},
-            { CommonUsages.primary2DAxisClick, "Joystick"}
+        private readonly Dictionary<string, string> _oculusOpenVRMappings = new Dictionary<string, string>() {
+            {"PrimaryButton", "[Y/B]"},
+            {"SecondaryButton", "[X/A]"},
+            {"Grip", "Grip"},
+            {"TriggerButton", "Trigger"},
+            {"Primary2DAxisClick", "Joystick"}
         };
 
-        private readonly Dictionary<InputFeatureUsage<bool>, string> _openVRMappings = new Dictionary<InputFeatureUsage<bool>, string>() {
-            { CommonUsages.primaryButton, "Primary"},
-            { CommonUsages.secondaryButton, "Alternate"},
-            { CommonUsages.gripButton, "Grip"},
-            { CommonUsages.triggerButton, "Trigger"},
-            { CommonUsages.primary2DAxisClick, "Trackpad/Joystick"}
+        private readonly Dictionary<string, string> _openVRMappings = new Dictionary<string, string>() {
+            {"PrimaryButton", "Primary"},
+            {"SecondaryButton", "Alternate"},
+            {"Grip", "Grip"},
+            {"TriggerButton", "Trigger"},
+            {"Primary2DAxisClick", "Trackpad/Joystick"}
         };
+
+        static bool InputSupported(InputDevice device, string input) {
+            List<InputFeatureUsage> usages = new List<InputFeatureUsage>();
+            return device.TryGetFeatureUsages(usages) && usages.Select(u => u.name).Contains(input);
+        }
 
         [UIAction("button-to-string")]
-        private string ButtonToString(InputFeatureUsage<bool> button)
+        private string ButtonToString(string button)
         {
             InputDevice? leftController, rightController;
             if (!ControllerGetter.GetControllers(out leftController, out rightController))
                 return "No controllers found";
-            if(!(leftController.Value.TryGetFeatureValue(button, out _)))
+            if (!(InputSupported(leftController.Value, button) || InputSupported(rightController.Value, button)))
+                return "Button not supported";
+            if (leftController.Value.manufacturer.Contains("Oculus"))
             {
-                if (!(rightController.Value.TryGetFeatureValue(button, out _)))
+                if (InputSupported(leftController.Value, "MenuButton")) {
+                    if (_oculusMappings.TryGetValue(button, out string oculusName))
+                        return oculusName;
+                }
+                else if (_oculusOpenVRMappings.TryGetValue(button, out string oculusOpenVRName))
                 {
-                    return "Button not supported";
+                    return oculusOpenVRName;
                 }
             }
-            if(leftController.Value.manufacturer.Contains("Oculus"))
+            else if (_openVRMappings.TryGetValue(button, out string openVRName))
             {
-                if(leftController.Value.TryGetFeatureValue(CommonUsages.menuButton, out _))
-                {
-                    if (_oculusMappings.ContainsKey(button))
-                        return _oculusMappings[button];
-                    return "Error";
-                }
-                else
-                {
-                    if (_oculusOpenVRMappings.ContainsKey(button))
-                        return _oculusOpenVRMappings[button];
-                    return "Error";
-                }
+                return openVRName;
             }
-            else
-            {
-                if (_openVRMappings.ContainsKey(button))
-                    return _openVRMappings[button];
-                return "Error";
-            }
+            return "Error";
         }
 
         [UIValue("min-stab-time")]
